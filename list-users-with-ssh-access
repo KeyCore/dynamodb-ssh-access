@@ -1,0 +1,8 @@
+#!/bin/bash
+
+/usr/bin/aws dynamodb scan \
+  --region eu-west-1 \
+  --table-name ssh-access \
+  --projection-expression userid \
+  --output text | grep USERID | awk -F '\t+' '{print $2}'
+

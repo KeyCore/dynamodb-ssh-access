@@ -1,0 +1,19 @@
+#!/bin/bash
+
+UNAME=$1
+
+if [[ -z $UNAME ]]; then
+	exit 1
+fi
+
+# XLP - Not sure what this does
+UNAME=${UNAME//"+"/".plus."}
+UNAME=${UNAME//"="/".equal."}
+UNAME=${UNAME//","/".comma."}
+UNAME=${UNAME//"@"/".at."}
+
+
+/usr/local/bin/list-ssh-keys-for-user $UNAME | while read SSH_KEY; do
+	echo $SSH_KEY
+done
+

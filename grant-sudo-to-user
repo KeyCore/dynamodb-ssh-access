@@ -1,0 +1,16 @@
+#!/bin/bash
+
+UNAME=$1
+
+if [[ -z $UNAME ]]; then
+	echo "Usage: add-sudo UNAME"
+	exit 1
+fi
+
+
+# sudo reads each file in /etc/sudoers.d
+# It skips file names that
+#  End with ~
+#  Contain  .
+echo "$UNAME ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/$UNAME"
+
