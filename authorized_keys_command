@@ -6,7 +6,7 @@ if [[ -z $UNAME ]]; then
 	exit 1
 fi
 
-# XLP - Not sure what this does
+# CP - handle weird users with weird names
 UNAME=${UNAME//"+"/".plus."}
 UNAME=${UNAME//"="/".equal."}
 UNAME=${UNAME//","/".comma."}

@@ -1,0 +1,26 @@
+{
+    "schemaVersion": "2.2",
+    "description": "Install KeyCore DynamoDB SSH Access scripts",
+    "parameters": {
+        "s3Url":{
+            "type":"String",
+            "default":"s3://keycore-installers/ssh-access/ssh-access.zip",
+            "description":"S3 folder with setup script and zip",
+            "maxChars":1024
+        }
+    },
+    "mainSteps": [
+      {
+        "action": "aws:runShellScript",
+        "name": "runSetupScript",
+        "inputs": {
+            "runCommand": [
+                "aws s3 cp {{ s3Url }} /tmp/ssh-access.zip", 
+                "unzip -o /tmp/ssh-access.zip", 
+                "sudo chmod +x setup.sh", 
+                "./setup.sh"],
+            "timeoutSeconds":"120"
+        }
+      }
+    ]
+  }

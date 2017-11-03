@@ -1,0 +1,15 @@
+{
+    "schemaVersion": "2.2",
+    "description": "Uninstall KeyCore DynamoDB SSH Access scripts",
+    "mainSteps": [
+      {
+        "action": "aws:runShellScript",
+        "name": "runSetupScript",
+        "inputs": {
+            "runCommand": [
+                "sudo cp /opt/ssh-dynamo/sshd_config.backup /etc/ssh/sshd_config"],
+            "timeoutSeconds":"10"
+        }
+      }
+    ]
+  }
