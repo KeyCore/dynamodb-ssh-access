@@ -5,12 +5,21 @@
 	echo "Processing: $UNAME"
 	echo "Adding user to machine"
 
-	sudo useradd $UNAME
+	getent passwd $1 > /dev/null
 
-	echo "Granting sudo to user"
-	sudo /usr/local/sbin/grant-sudo-to-user $UNAME
+	if [ $? -eq 0 ]; then
+		echo "User " $UNAME " already exits"
+	else
+		echo "Creating new user " $UNAME
+		sudo useradd $UNAME
 
-	echo ""
+		# TODO: CP -> make this dependant on DynamoDB config
+		echo "Granting sudo to user"
+		sudo /usr/local/sbin/grant-sudo-to-user $UNAME
+
+		echo ""
+	fi
+
 	echo ""
 done
 
