@@ -2,15 +2,18 @@
 
 /usr/local/bin/list-users-with-ssh-access | while read UNAME; do
 
-	echo "Processing: $UNAME"
-	echo "Adding user to machine"
+	 echo "Processing: $UNAME"
+        getent passwd $1 > /dev/null
 
-	sudo useradd $UNAME
-
-	echo "Granting sudo to user"
-	sudo /usr/local/sbin/grant-sudo-to-user $UNAME
-
-	echo ""
-	echo ""
+        if [ $? -eq 0 ]; then
+                echo "User " $UNAME " already exits"
+        else
+                echo "Creating new user " $UNAME
+                sudo useradd $UNAME
+                # TODO: CP -> make this dependant on DynamoDB config
+                echo "Granting sudo to user"
+                sudo /usr/local/sbin/grant-sudo-to-user $UNAME
+                echo ""
+        fi
 done
 
