@@ -34,8 +34,8 @@ Example item:
 To install run the setup.sh script - which performs these steps:
 
 **_Note:_**
-  * setup.sh assumes remaining files from this repo is present
-  * setup.sh executes all commands with sudo
+  * [setup.sh](setup.sh) assumes remaining files from this repo is present
+  * [setup.sh](setup.sh) executes all commands with sudo
 
 #### Setup steps
 1. Create folder **/opt/ssh-dynanmo/**
@@ -43,8 +43,8 @@ To install run the setup.sh script - which performs these steps:
 1. Create symlinks to scripts in **/usr/local/bin** and **/usr/local/sbin/**
 1. Grant execution rights to scripts _chmod a+x ..._
 1. Make a backup of the existing sshd config **_/etc/ssh/sshd_config_** (this backup is used for uninstallation)
-1. Run the script **_[configure-ssh.sh](../blob/master/configure-ssh.sh)_** which replaces 2 lines inside **_/etc/ssh/sshd_config_**
-1. Run the script **_create-machine-users.sh_** which reads all items from the dynamodb table and creates local users
+1. Run the script **_[configure-ssh.sh](configure-ssh.sh)_** which replaces 2 lines inside **_/etc/ssh/sshd_config_**
+1. Run the script **_[create-machine-users.sh](create-machine-users.sh)_** which reads all items from the dynamodb table and creates local users
 
 **_Note: SSH service will be restarted for changes to take effect - this is done by configure-ssh.sh_**
 
@@ -53,7 +53,7 @@ Used to change configuration of SSH Deamon to call our scripts on login.
 
 Changes SSH configuration by setting 2 options
 
-* [AuthorizedKeysCommand][ssh_auth_command] => [authorized_keys_command](../blob/master/autorized_keys_command)
+* [AuthorizedKeysCommand][ssh_auth_command] => [authorized_keys_command](autorized_keys_command)
 * [AuthorizedKeysCommandUser][ssh_auth_user] => root
 
 Restarts SSH Service after changing config
@@ -64,7 +64,7 @@ Restarts SSH Service after changing config
 ### Installation on AWS
 The scripts can be installed using [AWS EC2 Simple System Manager][ssm_main] by following theese steps:
 
-1. Create a SSM Document using the json files in the ec2_ssm folder
+1. Create a SSM Document using the json files in the [ec2_ssm](ec2_ssm) folder
 1. Execute a [SSM Run Command][ssm_run_command]
    * A Run Command is executed on a selection of EC2 instances (could be all with a specific tag value)
 
@@ -78,13 +78,13 @@ During the login process the following scripts are used
 The solution is comprised for 6 different scripts (each just a few lines)
 
 
-#### File: authorized_keys_command
+#### File: [authorized_keys_command](authorized_keys_command)
 This is the main script executed by SSH Deamon for each login - it has two basic steps:
 
  * Input validation and sanitation of usernames (ssh is more picky than others)
- * Call the _**list-ssh-keys-for-user**_ command and loop through each line of response to echo it
+ * Call the _**[list-ssh-keys-for-user](list-ssh-keys-for-user)**_ command and loop through each line of response to echo it
 
-#### File: **list-ssh-keys-for-user**
+#### File: **[list-ssh-keys-for-user](list-ssh-keys-for-user)**
 Called by the authorized_keys_command script for each login - has only one step:
  * Use AWS CLI to call dynamodb get-item for given userid
     * Fetch only attribute named **public-keys**
@@ -97,19 +97,19 @@ Called by the authorized_keys_command script for each login - has only one step:
 
 ## Creating local users based on DynamoDB content
 During installation this is done once - but based on you user change frequency this should be done regularly - suggested methods:
- * Schedule a call to create-machine-users.sh using CRON at whatever schedule seems right to you
+ * Schedule a call to [create-machine-users.sh](create-machine-users.sh) using CRON at whatever schedule seems right to you
  * Use AWS SSM to schedule a recurrent task
 
 **Note:** Future versions might allow for auto-creation of users at login time - but currently this is not supported!
 
-#### File: **create-machine-users.sh**
-Called without parameters and will use **list-users-with-ssh-access** script to loop through all users in DynamoDB and create local users where needed
+#### File: **[create-machine-users.sh](create-machine-users.sh)**
+Called without parameters and will use **[list-ssh-keys-for-user](list-ssh-keys-for-user)** script to loop through all users in DynamoDB and create local users where needed
 
 **Note** 
   * Currently this script calls grant-sudo-to-user for each created user - this will be more configurable in the future
 
-#### File: **list-users-with-ssh-access**
-Called by **create-machine-users.sh** script - has just one step:
+#### File: **[list-ssh-keys-for-user](list-ssh-keys-for-user)**
+Called by **[create-machine-users.sh](create-machine-users.sh)** script - has just one step:
 * Use AWS CLI to scan DynamoDB table for _userid_'s and output each result on separate line using pipe / awk
 
 **Note:**
@@ -117,7 +117,7 @@ Called by **create-machine-users.sh** script - has just one step:
   * This script is hardcoded to use a table named: **ssh-access** - future versions might move this to tag or something similar. For now - change if needed
 
 #### File: **grant-sudo-to-user**
-Called by **create-machine-users.sh** script - has just one step:
+Called by **[create-machine-users.sh](create-machine-users.sh)** script - has just one step:
 * Update **_/etc/sudoers.d/_** with a new entry for specified user
 
 ## Currently unhandled use-cases
