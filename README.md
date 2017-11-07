@@ -43,7 +43,7 @@ To install run the setup.sh script - which performs these steps:
 1. Create symlinks to scripts in **/usr/local/bin** and **/usr/local/sbin/**
 1. Grant execution rights to scripts _chmod a+x ..._
 1. Make a backup of the existing sshd config **_/etc/ssh/sshd_config_** (this backup is used for uninstallation)
-1. Run the script **_configure-ssh.sh_** which replaces 2 lines inside **_/etc/ssh/sshd_config_**
+1. Run the script **_[configure-ssh.sh](../blob/master/configure-ssh.sh)_** which replaces 2 lines inside **_/etc/ssh/sshd_config_**
 1. Run the script **_create-machine-users.sh_** which reads all items from the dynamodb table and creates local users
 
 **_Note: SSH service will be restarted for changes to take effect - this is done by configure-ssh.sh_**
@@ -53,7 +53,7 @@ Used to change configuration of SSH Deamon to call our scripts on login.
 
 Changes SSH configuration by setting 2 options
 
-* [AuthorizedKeysCommand][ssh_auth_command] => authorized_keys_command
+* [AuthorizedKeysCommand][ssh_auth_command] => [authorized_keys_command](../blob/master/autorized_keys_command)
 * [AuthorizedKeysCommandUser][ssh_auth_user] => root
 
 Restarts SSH Service after changing config
