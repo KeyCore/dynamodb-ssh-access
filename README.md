@@ -53,7 +53,7 @@ Used to change configuration of SSH Deamon to call our scripts on login.
 
 Changes SSH configuration by setting 2 options
 
-* [AuthorizedKeysCommand][ssh_auth_command] => [authorized_keys_command](autorized_keys_command)
+* [AuthorizedKeysCommand][ssh_auth_command] => [authorized_keys_command](authorized_keys_command)
 * [AuthorizedKeysCommandUser][ssh_auth_user] => root
 
 Restarts SSH Service after changing config
