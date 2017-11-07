@@ -3,7 +3,7 @@
 UNAME=$1
 
 if [[ -z $UNAME ]]; then
-	echo "Usage: get-user-key UNAME"
+	echo "Usage: list-ssh-keys-for-user UNAME"
 	exit 1
 fi
 

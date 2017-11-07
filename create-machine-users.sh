@@ -2,8 +2,9 @@
 
 /usr/local/bin/list-users-with-ssh-access | while read UNAME; do
 
-	echo "Processing: $UNAME"
-	echo "Adding user to machine"
+	 echo "Processing: $UNAME"
+        getent passwd $1 > /dev/null
+
 
 	getent passwd $1 > /dev/null
 
@@ -19,7 +20,5 @@
 
 		echo ""
 	fi
-
-	echo ""
 done
 
