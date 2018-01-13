@@ -2,11 +2,8 @@
 
 /usr/local/bin/list-users-with-ssh-access | while read UNAME; do
 
-	 echo "Processing: $UNAME"
-        getent passwd $1 > /dev/null
-
-
-	getent passwd $1 > /dev/null
+	echo "Processing: $UNAME"
+	getent passwd $UNAME > /dev/null
 
 	if [ $? -eq 0 ]; then
 		echo "User " $UNAME " already exits"
